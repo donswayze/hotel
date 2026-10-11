@@ -4,14 +4,12 @@ import sys
 import textwrap
 from datetime import date, timedelta
 
-# ======================================================================
-#  DESIGN SETTINGS  (change these to restyle the whole program)
-# ======================================================================
-WIDTH = 66             # total width of every box
-MARGIN = "  "          # empty space on the left of everything
-CLEAR_SCREEN = True    # clear the screen whenever a new screen opens
 
-os.system("")          # lets Windows terminals display colors
+WIDTH = 66             
+MARGIN = "  "          
+CLEAR_SCREEN = True    
+
+os.system("")          
 
 RESET = "\033[0m"
 GOLD = "\033[38;5;178m"
@@ -30,12 +28,10 @@ STATUS_COLORS = {
     "AVAILABLE": GREEN, "OCCUPIED": RED, "CLEANING": ORANGE,
 }
 
-INNER = WIDTH - 4      # usable space inside a box
+INNER = WIDTH - 4     
 ANSI = re.compile(r"\033\[[0-9;]*m")
 
-# ======================================================================
-#  HOTEL DATA  (same as before)
-# ======================================================================
+
 STAFF_PASSWORD = "staff123"
 ALLOWED_EMAILS = ["@gmail.com", "@yahoo.com", "@outlook.com", "@icloud.com", "@hotmail.com"]
 
@@ -70,9 +66,7 @@ reservations = []
 payments = []
 
 
-# ======================================================================
-#  DESIGN TOOLS  (everything that draws on the screen lives here)
-# ======================================================================
+
 def visible_len(text):
     """Length of the text as seen on screen (color codes take no space)."""
     return len(ANSI.sub("", text))
@@ -110,7 +104,6 @@ def badge(status):
     return f"{color}● {status}{RESET}"
 
 
-# ---------- messages ----------
 def _message(color, icon, text):
     lines = textwrap.wrap(text, WIDTH - 4) or [""]
     out(f"{color}{icon} {lines[0]}{RESET}")
@@ -138,7 +131,6 @@ def tip(text):
     _message(GREY, "✧", f"({text})")
 
 
-# ---------- boxes ----------
 def box_top(title=""):
     if title == "":
         out(f"{GOLD}╔{'═' * (WIDTH - 2)}╗{RESET}")
@@ -184,7 +176,6 @@ def kv_row(label, value, value_color=CREAM):
     box_row(f"{GREY}{label} {'·' * dots}{RESET} {shown}")
 
 
-# ---------- screens and menus ----------
 def banner():
     clear_screen()
     blank()
@@ -254,9 +245,7 @@ def goodbye():
     blank()
 
 
-# ======================================================================
-#  INPUT AND SMALL HELPERS
-# ======================================================================
+
 def ask_number(question, low, high, allow_back=False):
     while True:
         text = ask(question).strip()
@@ -329,9 +318,7 @@ def get_free_rooms(room_type, start, end, skip_id):
     return free
 
 
-# ======================================================================
-#  SHOWING BOOKINGS, DATES AND ROOMS
-# ======================================================================
+
 def show_booking(res):
     room = find_room(res["room"])
     box_top("BOOKING DETAILS")
@@ -501,9 +488,7 @@ def choose_room_type(check_in, check_out, guests_per_room, rooms_needed, skip_id
     return available[choice - 1]
 
 
-# ======================================================================
-#  PAYMENT
-# ======================================================================
+
 def ask_card():
     while True:
         cardholder = ask("Enter Name on Card: ").strip()
@@ -594,9 +579,7 @@ def take_payment(amount):
     return [pay_method, reference]
 
 
-# ======================================================================
-#  MAKING A RESERVATION
-# ======================================================================
+
 def make_reservation():
     screen("MAKE A RESERVATION")
     tip("You can type 'back' on any question to return to the menu.")
@@ -771,9 +754,7 @@ def make_reservation():
     return True
 
 
-# ======================================================================
-#  FINDING AND CHANGING BOOKINGS
-# ======================================================================
+
 def ask_booking_id():
     while True:
         search_id = ask("Enter Booking ID (e.g., M2-0001): ").strip().upper()
@@ -970,9 +951,7 @@ def change_booking(booking):
         show_booking(booking)
 
 
-# ======================================================================
-#  STAFF FUNCTIONS
-# ======================================================================
+
 def view_all_reservations():
     screen("ALL RESERVATIONS")
     if len(reservations) == 0:
@@ -1139,9 +1118,6 @@ def mark_room_clean():
     pause()
 
 
-# ======================================================================
-#  MAIN PROGRAM
-# ======================================================================
 def main():
     while True:
         banner()
